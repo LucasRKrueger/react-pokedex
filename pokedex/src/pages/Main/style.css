@@ -1,0 +1,8 @@
+.type-list{
+    list-style-type: none;
+    color: #000;
+    padding-left: 0px;
+    margin-top: 0px;
+    display: flex;
+    gap: 20px;   
+}

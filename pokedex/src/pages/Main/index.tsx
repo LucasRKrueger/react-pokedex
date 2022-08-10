@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import Card from "../../components/Card";
 import './style.css'
-
 const Main = () => {
     const [pokemon, setPokemon] = useState<Pokemon>();
     const [search, setSearch] = useState("");
@@ -15,27 +14,47 @@ const Main = () => {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${search ? search : "bulbasaur"}`);
         const data = await response.json();
         setPokemon(data);
-        console.log(data.types[0].type)
-        console.log(pokemon)
     }
 
     useEffect(() => {
         fetchData();
     }, [])
 
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value);
+    }
+
+    const fetchDataWithSearch = async () => {
+        if (search.length > 0) {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${search.toLowerCase()}`);
+            const data = await response.json();
+            console.log(response)
+            setPokemon(data);
+        }
+    }
+
     return (
         <Card>
             <div className="main">
-                <h3>{pokemon?.name}</h3>
-                {pokemon?.sprites.front_default &&
-                    <img width={200} height={200}
+                {(pokemon && pokemon?.sprites.front_default) &&
+                    <img className="pokemon-img" width={150} height={150}
                         src={pokemon.sprites.front_default} alt={pokemon.name} />
                 }
-                <ul className="type-list">
-                    {pokemon?.types && pokemon?.types.map((type: any, i: number) => (
-                        <li key={i}>{type.type.name}</li>
-                    ))}
-                </ul>
+                <h3 className="pokemon-name">{pokemon?.name}</h3>
+
+                <input className="input-search" type="search" placeholder="bulbasaur" value={search} onChange={e => handleSearch(e)} />
+
+                <div className="details">
+                    <div className="type">Types</div>
+                    <div className="details-container">
+                        <ul className="type-list">
+                            {pokemon?.types && pokemon.types.map((type: any, i: number) => (
+                                <li key={i}>{type.type.name}</li>
+                            ))}
+                        </ul>
+                        <button className="btn-search" onClick={() => fetchDataWithSearch()}>Search</button>
+                    </div>
+                </div>
             </div>
         </Card>
     )

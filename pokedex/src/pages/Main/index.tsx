@@ -11,7 +11,7 @@ const Main = () => {
     }
 
     const fetchData = async () => {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${search ? search : "bulbasaur"}`);
+        const response = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
         const data = await response.json();
         setPokemon(data);
     }
@@ -20,8 +20,9 @@ const Main = () => {
         fetchData();
     }, [])
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {        
         setSearch(e.target.value);
+        console.log(e)
     }
 
     const fetchDataWithSearch = async () => {
@@ -42,7 +43,7 @@ const Main = () => {
                 }
                 <h3 className="pokemon-name">{pokemon?.name}</h3>
 
-                <input className="input-search" type="search" placeholder="bulbasaur" value={search} onChange={e => handleSearch(e)} />
+                <input className="input-search" type="search" placeholder="Enter a pokemon name" value={search} onChange={e => handleSearch(e)} onKeyDown={e => e.key === 'Enter' ? fetchDataWithSearch() : null}/>
 
                 <div className="details">
                     <div className="type">Types</div>
